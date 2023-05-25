@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html>
+<head>  
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script>
+      function createJSON(c,r) {
+        jsonObj = [];        
+        for(i=0;i<r;i++)
+            for(j=0;j<c;j++)
+            {
+                item = {}
+                item [r+"_"] = 0;
+                jsonObj.push(item);            
+            }
+        return jsonObj;
+      }
+      function getRandomColor() {
+      var letters = '0123456789ABCDEF';
+      var color = '#';
+      for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      color='#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6)
+      return color;
+      }
+    </script>
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+      .modal-confirm {	
+          color: #8e8e8e;
+          width: 450px;
+        }
+      .modal-confirm .modal-content {
+        padding: 20px;
+        border-radius: 5px;		
+        border: none;
+      }
+      .modal-confirm .modal-header {
+        border-bottom: none;   
+            position: relative;
+        text-align: center;
+        border-radius: 5px 5px 0 0;
+      }
+      .modal-confirm h4 {
+        color: #545557;
+        text-align: center;
+        font-size: 30px;
+        margin: 0 0 25px;
+      }
+      .modal-confirm .form-control, .modal-confirm .btn {
+        min-height: 40px;
+        border-radius: 3px; 
+      }
+      .modal-confirm .close {
+        background: #c0c3c8;
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        color: #fff;
+        text-shadow: none;
+        opacity: 0.5;
+        width: 22px;
+        height: 22px;
+        border-radius: 20px;
+        font-size: 16px;
+      }
+      .modal-confirm .close span {
+        position: relative;
+        top: -1px;
+      }
+      .modal-confirm .close:hover {
+        opacity: 0.8;
+      }
+      .modal-confirm .icon-box {
+        color: #f95858;		
+        display: inline-block;
+        z-index: 9;
+        text-align: center;
+        position: relative;
+        transform: scale(1.5);
+      }
+      .modal-confirm .icon-box i:first-child {
+        font-size: 100px;
+      }
+      .modal-confirm .icon-box i:nth-child(2) {
+        font-size: 138px;
+        position: absolute;
+        left: -19px;
+        top: -23px;
+        font-weight: bold;
+        color: #fff;
+      }
+      .modal-confirm .icon-box i:last-child {
+        font-size: 26px;
+        position: absolute;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+        top: 44px;
+      }
+      .modal-confirm .btn {
+          color: #fff;
+          border-radius: 4px;
+      background: #eeb711;
+      text-decoration: none;
+      transition: all 0.4s;
+          line-height: normal;
+      border-radius: 3px;
+      margin: 30px 0 20px;
+      padding: 6px 20px;
+      min-width: 150px;
+          border: none;
+      }
+      .modal-confirm .btn:hover, .modal-confirm .btn:focus {
+        background: #eda645;
+        outline: none;
+      }
+      .trigger-btn {
+        display: inline-block;
+        margin: 100px auto;
+      }
+      .topnav {
+        overflow: hidden;
+        background-color: #333;
+      }
+      .topnav a {
+        float: left;
+        display: block;
+        color: #f2f2f2;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        font-size: 17px;
+      }
+      .topnav a:hover {
+        background-color: #ddd;
+        color: black;
+      }
+      .topnav a.active {
+        background-color: #4CAF50;
+        color: white;
+      }
+      .topnav .icon {
+        display: none;
+      }
+      @media screen and (max-width: 600px) {
+        .topnav a:not(:first-child) {display: none;}
+        .topnav a.icon {
+          float: right;
+          display: block;
+        }
+      }
+      @media screen and (max-width: 600px) {
+        .topnav.responsive {position: relative;}
+        .topnav.responsive .icon {
+          position: absolute;
+          right: 0;
+          top: 0;
+        }
+        .topnav.responsive a {
+          float: none;
+          display: block;
+          text-align: left;
+        }
+      }
+      .thVal {
+      width: 10%;
+      padding: 12px 20px;
+      margin: 8px 0;
+      display: inline-block;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      }
+      .enter {
+      width: 100%;
+      padding: 12px 20px;
+      margin: 8px 0;
+      display: inline-block;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      }      
+      button {
+      width: 100%;
+      background-color: #4CAF50;
+      color: white;
+      padding: 14px 20px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      }      
+      button:hover {
+      background-color: #45a049;
+      }      
+      .input {
+      border-radius: 5px;
+      background-color: #f2f2f2;
+      padding: 5px;
+      }
+      table {
+      border: solid 2px rgba(1, 1, 2, 0.788);
+      border-collapse: collapse;
+      border-spacing: 0;
+      font: normal 13px Arial, sans-serif;
+      }
+      th {
+      background-color: rgba(34, 2, 65, 0.911);
+      border: solid 1px #DDEEEE;
+      color: rgba(188, 255, 255, 0.849);
+      padding: 10px;
+      text-align: left;
+      text-shadow: 1px 1px 1px #fff;
+      }
+      td {
+      border: solid 1px rgba(255, 255, 255, 0.199);
+      color: #333;
+      padding: 2px;
+      text-shadow: 1px 1px 1px #fff;
+      }
+      .ff {
+      border: solid 1px rgb(0, 0, 0);
+      color: #333;
+      padding: 2px;
+      text-shadow: 1px 1px 1px #fff;
+      }
+      .modal-dialog {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      .modal-content {
+        height: auto;
+        min-height: 100%;
+        min-width: 100%;
+        border-radius: 0;
+      }
+      .modal-body {
+        overflow-x: auto;
+      }       
+    </style>
+    <script>
+       $("#about").click(function(){
+         alert("Ordonancement des jobs utilsant 'JobShop'")
+       })
+    </script>
+</head>
+<body>
+  <div class="topnav" id="myTopnav">
+    <a href="{{url_for('home')}}">Home</a>
+    <a href="{{url_for('manual')}}" class="active">Manual input</a>
+    <a href="{{url_for('from_file')}}">Load from file</a>
+    
+    <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+      <i class="fa fa-bars"></i>
+    </a>
+  </div>
+  <div class="input">        
+        <label for="inputX">Number of machines:</label>
+        <input type="number" name="enter" class="enter" value="" id="inputX"/><br>
+        <label for="inputY">Number of jobs:</label>
+        <input type="number" name="enter" class="enter" value="" id="inputY"/><br>
+        <button id='goBtn' onclick="fill_div(2,2)">click</button>       
+  </div>   
+  <div id="data">
+      <table id="input_data" style="width:100%"></table>
+  </div>
+  <br> 
+  <script>
+    function fill_div(c,r) {
+      var machines_number=$("#inputX").val();
+        var jobs_number=$("#inputY").val(); 
+        
+        if(machines_number=="" || jobs_number=="")  
+        {
+            $("#myModal").modal();
+        }  else{   
+        var tbl=document.getElementById("input_data");
+        while(tbl.hasChildNodes())
+        {
+            tbl.removeChild(tbl.firstChild);
+        }
+        var header=document.createElement("tr");
+        var empty_th=document.createElement("th")
+        
+        var btn=document.createElement("button")
+        btn.innerHTML="Calculate";
+        btn.setAttribute("type","button")
+        btn.setAttribute("data-toggle","modal");
+        btn.setAttribute("data-target","table_modal");
+        
+        btn.addEventListener("click", function(){
+          var array = []; //your array
+          var rows = document.getElementById("input_data").getElementsByTagName("tr");
+          for(var i = 0; i < rows.length; i++) {
+            var array1=[]
+            var cols=rows[i].getElementsByTagName("td")
+            for(var j=0;j<cols.length;j++){
+              if(cols[j].innerHTML!="" && cols[j].innerHTML!="0"){
+                array1.push(cols[j].innerHTML);
+              }
+            }
+            array.push(array1)
+          }
+          var infos={data:array};
+          $.ajax({
+            dataType: 'json',
+            type:'post',
+            url: "http://127.0.0.1:5000/jobshop/manual",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(infos),
+            success: function(resp){
+              var time=resp["time"]
+                           
+             
+                //[ 'Magnolia Room', 'Beginning JavaScript',       new Date(0,0,0,12,0,0),  new Date(0,0,0,13,30,0) ],
+                var xy=resp["data"]
+
+                chart_data=[]
+
+                 for(l=0;l<xy.length;l++) {
+                 for(n=0;n<xy[l].length;n++)
+                  {
+
+                    if(parseInt(xy[l][n][3],10)!=0)
+
+                   { 
+                    var element=[]
+                  var dt=new Date(0,0,0,0,0,0)
+                  
+                  var labJob=+xy[l][n][0]+ +1
+                  element.push("Job"+ labJob)
+                  
+                  var indmach=xy[l][n][1].replace("Mach","")
+                  var labmach=+indmach+ +1
+                   element.push("M"+labmach);
+                   
+                   var dt1=new Date(0,0,0,0,0,0)                  
+                   var start=dt1.getSeconds() + parseInt(xy[l][n][2],10);
+                   dt1.setSeconds(start)
+                   element.push(dt1);
+                   
+                   var dt2=new Date(0,0,0,0,0,0)
+                   var end=parseInt(xy[l][n][3],10);
+                   dt2.setSeconds(start+end)
+                   element.push(dt2);
+                   chart_data.push(element);
+                 }
+                 }
+               }
+
+                    $("#opt_time").html(time)
+                     drawChart(chart_data)
+            }
+            });
+            });
+            empty_th.appendChild(btn);
+            header.appendChild(empty_th);
+            for(i=0;i<machines_number;i++)
+            {
+                var aux=document.createElement("th");
+                aux.setAttribute("scope","col");
+                var k=i+1;
+                aux.innerHTML="Mach "+k;
+                header.appendChild(aux);
+            }            
+            tbl.appendChild(header);
+            for(i=0;i<jobs_number;i++)
+            {
+                var tr=document.createElement("tr");
+                var th=document.createElement("th");
+                th.setAttribute("scope","row");
+                var k=i+1;
+                th.innerHTML="Job "+k;
+                tr.appendChild(th);
+                for(j=0;j<machines_number;j++)
+                {
+                    var td=document.createElement("td");
+                    tr.appendChild(td);
+                }
+                tbl.appendChild(tr);
+            }
+            $('#input_data').find('td').each(function(){
+            $(this).click(function() {
+                $('table td').not($(this)).prop('contenteditable', false);
+                $(this).prop('contenteditable', true);
+            });
+            $(this).blur(function() {
+                $(this).prop('contenteditable', false);
+            });
+        });}
+        }      
+    </script>
+<div id="myModal" class="modal fade">
+	<div class="modal-dialog modal-confirm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<div class="icon-box">
+					<i class="material-icons">&#xE86B;</i>
+					<i class="material-icons">&#xE86B;</i>
+					<i class="material-icons">&#xE645;</i>
+				</div>
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span>&times;</span></button>
+			</div>
+			<div class="modal-body text-center">
+				<h4>Something went wrong</h4>	
+				<p>An unexpected error has occurred. Please try again later. Contact support if the error persists.</p>
+				<button class="btn btn-primary" data-dismiss="modal">Go Back</button>
+			</div>
+		</div>
+	</div>
+</div>  
+<h4>Result: </h4>	
+				<p>Temps optimal: <span id="opt_time"></span></p>
+				<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<script>
+  google.charts.load("current", {packages:["timeline"]});
+            google.charts.setOnLoadCallback(drawChart);
+  function drawChart(datt) {
+
+    var ccc=[]
+    if(datt!=null)
+    ccc=datt
+  
+var chartwidth = $('#chartt').width;
+    var container = document.getElementById('chartt');
+    var chart = new google.visualization.Timeline(container);
+    var dataTable = new google.visualization.DataTable();
+    dataTable.addColumn({ type: 'string', id: 'Room' });
+    dataTable.addColumn({ type: 'string', id: 'Name' });
+    dataTable.addColumn({ type: 'date', id: 'Start' });
+    dataTable.addColumn({ type: 'date', id: 'End' });
+    dataTable.addRows(ccc);
+
+    var options = {
+     width: chartwidth,
+      timeline: { colorByRowLabel: false}
+    };
+    google.visualization.events.addListener(chart, 'onmouseover', function (obj) {
+
+var startDate = dataTable.getValue(obj.row, 2);
+var endDate   = dataTable.getValue(obj.row, 3);
+var seconds = (startDate.getTime() - new Date(0,0,0,0,0,0).getTime()) / 1000;
+var timeDiff = Math.abs(startDate.getTime() - endDate.getTime());
+var diffDays = (timeDiff / (1000 * 3600 * 24)); 
+var ed=+seconds+ +timeDiff/1000
+var ht="<table width='100%'><tr><th scope='row'>Start</th><td>"+seconds+"</td></tr><tr><th scope='row'>End</th><td>"+ ed+"</td></tr><tr><th scope='row'>Duration</th><td>"+timeDiff/1000+"</td></tr></table>"
+
+$(".google-visualization-tooltip").html(ht);
+});
+
+    chart.draw(dataTable, options);
+  }
+
+</script>
+     
+
+
+    
+<div id="chart_wrapper">
+<div id="chartt" ></div>   
+</body>
+</html>
